@@ -52,6 +52,9 @@ public class KinesisFileFlow extends FileFlow<KinesisRecord> {
         if (partitionKeyOption == PartitionKeyOption.CONSTANT) {
             constantPartitionKey = readString(KinesisConstants.CONSTANT_PARTITION_KEY);
         }
+        else {
+            constantPartitionKey = null;
+        }
 
     }
 
