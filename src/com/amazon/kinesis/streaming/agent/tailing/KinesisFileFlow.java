@@ -50,8 +50,9 @@ public class KinesisFileFlow extends FileFlow<KinesisRecord> {
         id = "kinesis:" + destination + ":" + sourceFile.toString();
         partitionKeyOption = readEnum(PartitionKeyOption.class, KinesisConstants.PARTITION_KEY, PartitionKeyOption.RANDOM);
         if (partitionKeyOption == PartitionKeyOption.CONSTANT) {
-            constantPartitionKey = KinesisConstants.CONSTANT_PARTITION_KEY;
+            constantPartitionKey = readString(KinesisConstants.CONSTANT_PARTITION_KEY);
         }
+
     }
 
     @Override
