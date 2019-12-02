@@ -28,13 +28,13 @@ public class KinesisRecord extends AbstractRecord {
     public KinesisRecord(TrackedFile file, long offset, ByteBuffer data, long originalLength) {
         super(file, offset, data, originalLength);
         Preconditions.checkNotNull(file);
-        partitionKey = generatePartitionKey(((KinesisFileFlow)file.getFlow()).getPartitionKeyOption());
+        partitionKey = generatePartitionKey((KinesisFileFlow)file.getFlow());
     }
 
     public KinesisRecord(TrackedFile file, long offset, byte[] data, long originalLength) {
         super(file, offset, data, originalLength);
         Preconditions.checkNotNull(file);
-        partitionKey = generatePartitionKey(((KinesisFileFlow)file.getFlow()).getPartitionKeyOption());
+        partitionKey = generatePartitionKey((KinesisFileFlow)file.getFlow());
     }
 
     public String partitionKey() {
@@ -57,7 +57,8 @@ public class KinesisRecord extends AbstractRecord {
     }
 
     @VisibleForTesting
-    String generatePartitionKey(PartitionKeyOption option) {
+    String generatePartitionKey(KinesisFileFlow flow) {
+        PartitionKeyOption option = flow.getPartitionKeyOption();
         Preconditions.checkNotNull(option);
 
         if (option == PartitionKeyOption.DETERMINISTIC) {
@@ -68,8 +69,9 @@ public class KinesisRecord extends AbstractRecord {
         if (option == PartitionKeyOption.RANDOM)
             return "" + ThreadLocalRandom.current().nextDouble(1000000);
 
-        if (option == PartitionKeyOption.CONSTANT)
+        if (option == PartitionKeyOption.CONSTANT) {
             return flow.getConstantPartitionKey();
+        }
 
         return null;
     }
